@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit name="DataSourceEx" transaction-type="JTA">
+
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<jta-data-source>java:jboss/datasources/DataSourceEx</jta-data-source> <!-- If you want to use JTA as transaction type, So you must defining jta-data-source. -->
+		
+		 <properties>
+		 <!-- По сути, то что здесь написано, полностью дублирует информацию в файле standelone.xml или standelone-full.xml. По этой причине пока закомментировал дублирующую часть!
+
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://dbserver/testdb" />
+            <property name="javax.persistence.jdbc.user" value="testov" />
+            <property name="javax.persistence.jdbc.password" value="testov" />
+        -->
+
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/> <!-- DB Dialect -->
+            <property name="hibernate.show_sql" value="true" /> <!-- Show SQL in console -->
+            <property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
+
+            <property name="hibernate.hbm2ddl.auto" value="update" /> <!-- create / create-drop / update -->
+
+
+			 <property name="hibernate.connection.charSet" value="UTF-8"/>
+			 <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+			 <property name="hibernate.connection.useUnicode" value="true"/>
+		</properties>
+		
+	</persistence-unit>
+</persistence>
