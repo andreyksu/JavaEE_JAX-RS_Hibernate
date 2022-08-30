@@ -57,7 +57,7 @@ Instruction
 JMS
 	1. Настроить работу с JMS в конфигурационном файле standelone.xml или standelone-full.xml
 		- По умолчанию в standelone.xml не добавлена поддержка JMS для этого нужно в первую очередь добавить поддержку JMS после чего уже добавлять очереди и настраивать под свои нужды.
-			Или непосредственно в standelone.xml добавить элемент:
+			Непосредственно в standelone.xml добавить элемент:
 			<extensions>
 			    ...
 				<extension module="org.wildfly.extension.messaging-activemq"/>
@@ -93,7 +93,7 @@ JMS
 3. Создание пользователя:
 	psql -U postgres -d postgres -h localhost
 		CREATE USER testov WITH ENCRYPTED PASSWORD 'testov';
-		CREATE DATABASE testdb with owner = testov encoding = 'UTF8' tablespace = pg_default  lc_collate = 'ru_RU.UTF-8' LC_CTYPE = 'ru_RU.UTF-8'; --GRANT ALL PRIVILEGES ON DATABASE yourdbname TO youruser;
+		CREATE DATABASE testdb with owner = testov encoding = 'UTF8' tablespace = pg_default  lc_collate = 'ru_RU.UTF-8' LC_CTYPE = 'ru_RU.UTF-8'; --GRANT ALL PRIVILEGES ON DATABASE testov TO testov;
 			
 	Авторизоваться под созданным пользователем в созданную базу:
 		psql -U testov -d testdb -h localhost

@@ -16,13 +16,30 @@
  */
 package ru.annikonenkov.ejbpack.someservice;
 
+import javax.ejb.EJB;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import ru.annikonenkov.ejbpack.info.IInfo;
+import ru.annikonenkov.ejbpack.info.Info;
+
 /**
  * @author Andrey
  */
 public class SomeService {
 
+    @PersistenceContext(unitName = "DataSourceEx")
+    private EntityManager em;
+    
+    //@Inject
+    @EJB //В CDI бин инжекчу EJB-бин через аннотацию @EJB
+    IInfo info;
+    
     public String createMessage(String name) {
         return name;
     }
+    
+    
 
 }

@@ -20,12 +20,13 @@ public class Info implements IInfo {
     /**
      * Аналогично классу Calc.<br>
      *
-     * @Stateless - бины не должны иметь полей класса/экземпляра.
+     * @Stateless - бины не должны иметь полей класса/экземпляра, кроме инжектируемых.
      */
     private List<String> postConstruct;
     private List<String> constructor;
 
     public Info() {
+    	System.out.println("Class --- Info: Constructor");
         constructor = new ArrayList<String>();
     }
 
@@ -76,28 +77,31 @@ public class Info implements IInfo {
     @PostConstruct
     public void init() {
         postConstruct = new ArrayList<String>();
-        System.out.println("Info: @PostConstruct : init");
+        System.out.println("Class --- Info: @PostConstruct : init");
     }
 
     @PreDestroy
     public void destroy() {
-        System.out.println("Info: @PreDestroy : destroy");
+        System.out.println("Class --- Info: @PreDestroy : destroy");
     }
 
     /**
-     * Аннотация используется только для stateful
+     * NB! Аннотация используется только для stateful
      */
+    
+    /*
     @Remove
     public void checkOut() {
-        System.out.println("Info: @Remove : checkOut");
+        System.out.println("Class --- Info: @Remove : checkOut");
     }
+    */
 
     /**
      * Аннотация используется только для stateful
      */
     @AfterBegin
     private void afterBegin() {
-        System.out.println("Info: @AfterBegin : afterBegin");
+        System.out.println("Class --- Info: @AfterBegin : afterBegin");
     }
 
     /**
@@ -105,7 +109,7 @@ public class Info implements IInfo {
      */
     @BeforeCompletion
     private void beforeCompletion() {
-        System.out.println("Info: @BeforeCompletion : beforeCompletion");
+        System.out.println("Class --- Info: @BeforeCompletion : beforeCompletion");
     }
 
     /**
@@ -113,7 +117,7 @@ public class Info implements IInfo {
      */
     @AfterCompletion
     private void afterCompletion(boolean committed) {
-        System.out.println("Info: @AfterCompletion : afterCompletion");
+        System.out.println("Class --- Info: @AfterCompletion : afterCompletion");
     }
 
 }
