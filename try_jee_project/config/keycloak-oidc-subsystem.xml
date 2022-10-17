@@ -1,0 +1,7 @@
+<secure-deployment name="WAR MODULE NAME.war">
+    <realm>myrealm</realm>
+    <auth-server-url>http://localhost:9099/auth/</auth-server-url>
+    <public-client>true</public-client>
+    <ssl-required>EXTERNAL</ssl-required>
+    <resource>myjax</resource>
+</secure-deployment>
