@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import ru.annikonenkov.rs.message.entities.group.Group;
 import ru.annikonenkov.rs.message.entities.group.GroupDAO;
+import ru.annikonenkov.rs.message.entities.message.exception.ExceptionForAddMessage;
 import ru.annikonenkov.rs.message.entities.user.User;
 import ru.annikonenkov.rs.message.entities.user.UserDAO;
 
@@ -73,13 +74,15 @@ public class MessageDAO {
 	 * они должны сохраняться? Не в этом же DAO ведь? Тогда кто об этом должен
 	 * заботиться? Не endPoind - же. Нужен какой-то контроллер?
 	 */
-	public boolean addNewMessageToGroup(String textOfMessage, int authorId, int groupReceiverId) {
+	public int addNewMessageToGroup(String textOfMessage, int authorId, int groupReceiverId) throws ExceptionForAddMessage {
 		User author = userDAO.getUserById(authorId);
 		Group groupReceiver = groupDAO.getGroupById(groupReceiverId);
 
-		if (author == null || groupReceiver == null)
-			return false;
-
+		if (author == null || groupReceiver == null) {
+			String message = String.format("Целевая группа или пользователь не найден isAuthorNull = %b isReceiverNull = %b", author == null, groupReceiver == null);	
+			throw new ExceptionForAddMessage(message);
+		}
+		
 		Date dateOfMessage = new Date();
 		Message message = new Message();
 		message.setDateOfMessage(dateOfMessage);
@@ -87,17 +90,46 @@ public class MessageDAO {
 		message.setAuthor(author);
 		message.setGroupReceiver(groupReceiver);
 		em.persist(message);
+		
+		int idOfMessage = message.getId();
+		return idOfMessage;
+	}
+	
+	public int addNewMessageToGroupWithFile(String textOfMessage, int authorId, int groupReceiverId, byte[] file,
+			String mediaType) throws ExceptionForAddMessage {
+		User author = userDAO.getUserById(authorId);
+		Group groupReceiver = groupDAO.getGroupById(groupReceiverId);
 
-		return true;
+		if (author == null || groupReceiver == null) {
+			String message = String.format("Целевая группа или пользователь не найден isAuthorNull = %b isReceiverNull = %b", author == null, groupReceiver == null);	
+			throw new ExceptionForAddMessage(message);
+		}
+
+		Date dateOfMessage = new Date();
+		Message message = new Message();
+		message.setDateOfMessage(dateOfMessage);
+		message.setTextOfMessage(textOfMessage);
+		message.setAuthor(author);
+		message.setGroupReceiver(groupReceiver);
+		message.setFile(file);
+		message.setMimeType(mediaType);
+		em.persist(message);
+		
+		int idOfMessage = message.getId();
+		return idOfMessage;
 	}
 
-	public boolean addNewMessage(String textOfMessage, int authorId, int userReceiverId) {
+	public int addNewMessage(String textOfMessage, int authorId, int userReceiverId) throws ExceptionForAddMessage {
 		User author = userDAO.getUserById(authorId);
 		User receiver = userDAO.getUserById(userReceiverId);
-		
-		if (author == null || receiver == null)
-			return false;
-		
+
+		if (author == null || receiver == null) {
+			String message = String.format(
+					"Целевая группа или пользователь не найден isAuthorNull = %b isReceiverNull = %b", author == null,
+					receiver == null);
+			throw new ExceptionForAddMessage(message);
+		}
+
 		Date dateOfMessage = new Date();
 		Message message = new Message();
 		message.setDateOfMessage(dateOfMessage);
@@ -105,8 +137,33 @@ public class MessageDAO {
 		message.setAuthor(author);
 		message.setReceiver(receiver);
 		em.persist(message);
+		int idOfMessage = message.getId();
+		return idOfMessage;
+	}
 
-		return true;
+	public int addNewMessageToUserWithFile(String textOfMessage, int authorId, int userReceiverId, byte[] file,
+			String mediaType) throws ExceptionForAddMessage {
+		User author = userDAO.getUserById(authorId);
+		User receiver = userDAO.getUserById(userReceiverId);
+
+		if (author == null || receiver == null) {
+			String message = String.format(
+					"Целевая группа или пользователь не найден isAuthorNull = %b isReceiverNull = %b", author == null,
+					receiver == null);
+			throw new ExceptionForAddMessage(message);
+		}
+
+		Date dateOfMessage = new Date();
+		Message message = new Message();
+		message.setDateOfMessage(dateOfMessage);
+		message.setTextOfMessage(textOfMessage);
+		message.setAuthor(author);
+		message.setReceiver(receiver);
+		message.setFile(file);
+		message.setMimeType(mediaType);
+		em.persist(message);
+		int idOfMessage = message.getId();
+		return idOfMessage;
 	}
 
 	/**

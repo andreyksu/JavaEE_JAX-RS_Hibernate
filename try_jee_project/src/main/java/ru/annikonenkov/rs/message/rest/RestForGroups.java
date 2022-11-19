@@ -23,15 +23,17 @@ import org.jboss.logging.Logger;
 
 import ru.annikonenkov.rs.message.entities.group.Group;
 import ru.annikonenkov.rs.message.entities.group.GroupDAO;
-import ru.annikonenkov.rs.message.entities.group.PrintableGroup;
+import ru.annikonenkov.rs.message.entities.group.dto.TransferToDTOGroup;
+import ru.annikonenkov.rs.message.entities.group.printable.PrintableGroup;
 import ru.annikonenkov.rs.message.entities.message.MessageDAO;
-import ru.annikonenkov.rs.message.entities.user.PrintableUser;
 import ru.annikonenkov.rs.message.entities.user.User;
 import ru.annikonenkov.rs.message.entities.user.UserDAO;
+import ru.annikonenkov.rs.message.entities.user.printable.PrintableUser;
 
-@RequestScoped
-//@Transactional //Работает нормально. К ошибке не приводит, как если установить у метода.
-//@Stateless
+//Со слов Э.Гонсалвес - входной точкой должен быть EJB.
+//@RequestScoped
+//@Transactional Работает нормально. К ошибке не приводит, как если установить у метода.
+@Stateless
 @Path("/chat/groups")
 public class RestForGroups {
 
@@ -62,7 +64,9 @@ public class RestForGroups {
 	@Produces({ "application/json" })
 	public Response getGroupById(@PathParam("groupId") Integer groupId) {
 		Group group = groupDAO.getGroupById(groupId);
-		return Response.ok(PrintableGroup.doPrintableGriup(group)).build();
+		TransferToDTOGroup transfer = new TransferToDTOGroup();
+		// return Response.ok(PrintableGroup.doPrintableGriup(group)).build();
+		return Response.ok(transfer.transferGroupToDTOGroup(group)).build();
 	}
 
 	// +++++
@@ -73,7 +77,7 @@ public class RestForGroups {
 		StringBuilder sbForGroup = new StringBuilder();
 		List<Group> groupList = groupDAO.getAllGroupsForUserId(userId, false);
 		groupList.forEach(groupItem -> {
-			sbForGroup.append(PrintableGroup.doPrintableGriup(groupItem));			
+			sbForGroup.append(PrintableGroup.doPrintableGriup(groupItem));
 			List<User> listOfUsers = new ArrayList<>(groupItem.getUsers());
 			sbForGroup.append(PrintableUser.doPrintableUsers(listOfUsers));
 			sbForGroup.append("\n");

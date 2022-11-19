@@ -1,7 +1,6 @@
 package ru.annikonenkov.rs.message.entities.user;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,8 +42,7 @@ public class UserDAO {
 	 * @return
 	 */
 	public List<User> getFriendsOfUserWithUserId(Integer userId, boolean isDeleted) {
-		Query query = em.createQuery(
-				"SELECT u FROM User u LEFT JOIN FETCH u.partners p WHERE p.id = :id AND u.isDeleted = :isDeleted");
+		Query query = em.createQuery("SELECT u FROM User u JOIN FETCH u.partners p WHERE p.id = :id AND u.isDeleted = :isDeleted");
 		query.setParameter("id", userId);
 		query.setParameter("isDeleted", isDeleted);
 		@SuppressWarnings("unchecked")

@@ -1,16 +1,14 @@
 package ru.annikonenkov.rs.message.rest;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
+
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
+
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,15 +21,16 @@ import org.jboss.logging.Logger;
 
 import ru.annikonenkov.rs.message.entities.group.Group;
 import ru.annikonenkov.rs.message.entities.group.GroupDAO;
+import ru.annikonenkov.rs.message.entities.group.dto.DTOGroup;
+import ru.annikonenkov.rs.message.entities.group.dto.TransferToDTOGroup;
 import ru.annikonenkov.rs.message.entities.message.MessageDAO;
-import ru.annikonenkov.rs.message.entities.user.PrintableUser;
-import ru.annikonenkov.rs.message.entities.user.TransferToDTOUser;
 import ru.annikonenkov.rs.message.entities.user.User;
 import ru.annikonenkov.rs.message.entities.user.UserDAO;
+import ru.annikonenkov.rs.message.entities.user.dto.DTOUser;
+import ru.annikonenkov.rs.message.entities.user.dto.TransferToDTOUser;
 
-@Path("/chat/users")
-//@RequestScoped
 @Stateless
+@Path("/chat/users")
 public class RestForUsers {
 
 	@Inject
@@ -61,8 +60,30 @@ public class RestForUsers {
 	@Produces({ "application/json" })
 	public Response getUserById(@PathParam("userId") Integer userId) {
 		User targetUser = userDAO.getUserById(userId);
+		// return Response.ok(targetUser).build();
 		TransferToDTOUser transfer = new TransferToDTOUser();
 		return Response.ok(transfer.transferUserToDTOUser(targetUser)).build();
+
+	}
+
+	@GET
+	@Path("/getUserByIdForStart/userId==={userId}")
+	@Produces({ "application/json" })
+	public Response getUserByIdForStart(@PathParam("userId") Integer userId) {
+		User targetUser = userDAO.getUserById(userId);
+		List<User> friends = userDAO.getFriendsOfUserWithUserId(userId, false);
+		List<Group> groups = groupDAO.getAllGroupsForUserId(userId, false);
+		TransferToDTOUser transferUser = new TransferToDTOUser();
+		TransferToDTOGroup transgerGroup = new TransferToDTOGroup();
+
+		DTOUser dtoUser = transferUser.transferUserToDTOUser(targetUser);
+		List<DTOUser> dtoFriends = transferUser.transferListUserToListDTOUser(friends);
+		List<DTOGroup> dtoGroups = transgerGroup.transferGroupListToDTOGroupList(groups);
+
+		dtoUser.setFriends(dtoFriends);
+		dtoUser.setGroups(dtoGroups);
+
+		return Response.ok(dtoUser).build();
 	}
 
 	// +++++
@@ -76,25 +97,6 @@ public class RestForUsers {
 	}
 
 	// +++++
-	@GET
-	@Path("/getFriendsOfUserId_TMP/userId==={userId}")
-	@Produces({ "application/json" })
-	public Response getFriedsOfUserId_TMP(@PathParam("userId") Integer userId) {
-		User targetUser = userDAO.getUserById(userId);
-		List<User> list = userDAO.getFriendsOfUserWithUserId(userId, false);
-		StringBuilder sbForLogOut = new StringBuilder();
-		sbForLogOut.append("The size of messages array = ");
-		sbForLogOut.append(list.size());
-		sbForLogOut.append("\n");
-		sbForLogOut.append("Target:");
-		sbForLogOut.append(PrintableUser.doPrintableUser(targetUser));
-		sbForLogOut.append("\n");
-		sbForLogOut.append("Friends:");
-		sbForLogOut.append("\n");
-		sbForLogOut.append(PrintableUser.doPrintableUsers(list));
-		return Response.ok(sbForLogOut.toString()).build();
-	}
-
 	@GET
 	@Path("/getFriendsOfUserId/userId==={userId}")
 	@Produces({ "application/json" })
@@ -119,6 +121,7 @@ public class RestForUsers {
 	}
 
 	// +++++
+	// @DELETE
 	@GET
 	@Path("/deleteUserById/userId---{userId}")
 	@Produces({ "application/json" })

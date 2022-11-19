@@ -1,7 +1,9 @@
-package ru.annikonenkov.rs.message.entities.user;
+package ru.annikonenkov.rs.message.entities.user.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.annikonenkov.rs.message.entities.user.User;
 
 public class TransferToDTOUser {
 

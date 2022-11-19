@@ -10,7 +10,8 @@ import ru.annikonenkov.rs.message.entities.group.Group;
 import ru.annikonenkov.rs.message.entities.user.User;
 
 @Entity
-@Table(name = "messages", uniqueConstraints = {@UniqueConstraint(columnNames = { "r_user_suid", "group_suid" }, name = "uk_user_and_friend") })
+@Table(name = "messages", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "r_user_suid", "group_suid" }, name = "uk_user_and_friend") })
 public class Message {
 	@Id
 	@SequenceGenerator(name = "message_geneartor", sequenceName = "suid_grenerator", allocationSize = 1)
@@ -31,13 +32,19 @@ public class Message {
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] fileOfMessage;
 
+	@Column(name = "is_present_file", nullable = false, columnDefinition = "boolean default false")
+	private boolean isPresentFile = false;
+
+	@Column(name = "mime_type")
+	private String mimeType;
+
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
 	private boolean isDeleted = false;
 
 	/*
-	 * Правильный подход - когда все свзяи являются LAZY - а когда необходимо уже
-	 * непосредственным запросом запрашиваем данные. Здесь оставил EAGER - т.к. один
-	 * пользователь у автор и один получатель. И далее у них все зависимости LAZY.
+	 * Правильный подход - когда все связи являются LAZY - а когда необходимо уже
+	 * непосредственным запросом запрашиваем данные. Здесь оставил EAGER - т.к. у сообщения один
+	 * пользователь и один получатель. И далее у пользователя и у группы все зависимости LAZY.
 	 * 
 	 * https://thorben-janssen.com/self-referencing-associations/
 	 * 
@@ -49,16 +56,19 @@ public class Message {
 	 * 
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "a_user_suid", referencedColumnName = "suid", foreignKey = @ForeignKey(name = "fk_message_on_a_user"), nullable = false)
+	@JoinColumn(name = "a_user_suid", referencedColumnName = "suid", foreignKey = @ForeignKey(name = "fk_message_on_a_user"), nullable = false)//a_user author_user
 	private User author;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "r_user_suid", referencedColumnName = "suid", foreignKey = @ForeignKey(name = "fk_message_on_user_r"))
+	@JoinColumn(name = "r_user_suid", referencedColumnName = "suid", foreignKey = @ForeignKey(name = "fk_message_on_user_r"))//user_r user receiver
 	private User receiver;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "group_suid", referencedColumnName = "suid", foreignKey = @ForeignKey(name = "fk_message_on_group"))
 	private Group groupReceiver;
+
+	public Message() {
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -86,13 +96,23 @@ public class Message {
 
 	public void setFile(byte[] fileOfMessage) {
 		this.fileOfMessage = fileOfMessage;
+		this.isPresentFile = true;
 	}
 
 	public byte[] getFile() {
 		return this.fileOfMessage;
 	}
 
-	public Message() {
+	public boolean getIsPresentFile() {
+		return this.isPresentFile;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	public String getMimeType() {
+		return this.mimeType;
 	}
 
 	public void setAuthor(User author) {
@@ -125,7 +145,7 @@ public class Message {
 	public void setIsDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
+
 	public boolean getIsDeleted() {
 		return isDeleted;
 	}

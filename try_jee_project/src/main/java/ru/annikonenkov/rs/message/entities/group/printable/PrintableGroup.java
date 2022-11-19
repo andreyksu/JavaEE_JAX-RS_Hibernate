@@ -1,6 +1,8 @@
-package ru.annikonenkov.rs.message.entities.group;
+package ru.annikonenkov.rs.message.entities.group.printable;
 
 import java.util.List;
+
+import ru.annikonenkov.rs.message.entities.group.Group;
 
 public class PrintableGroup {
 

@@ -1,6 +1,8 @@
-package ru.annikonenkov.rs.message.entities.user;
+package ru.annikonenkov.rs.message.entities.user.printable;
 
 import java.util.List;
+
+import ru.annikonenkov.rs.message.entities.user.User;
 
 public class PrintableUser {
 
