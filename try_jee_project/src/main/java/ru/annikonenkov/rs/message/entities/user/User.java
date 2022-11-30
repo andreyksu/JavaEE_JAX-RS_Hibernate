@@ -239,6 +239,7 @@ public class User {
 		return this.messagesWhereUserIsAuthor;
 	}
 
+	//TODO: Такое допустимо, только из за Set - а так был бы дубль. По сути здесь добавление в коллекцию нужно убрать. Т.к. делается это в setReceiver(...).
 	public void addMessageToReceiver(Message message) {
 		message.setReceiver(this);
 		this.messagesWhereUserIsReceiver.add(message);

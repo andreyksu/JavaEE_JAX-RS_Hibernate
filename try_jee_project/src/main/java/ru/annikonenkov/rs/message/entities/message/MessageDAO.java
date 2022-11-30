@@ -12,9 +12,9 @@ import javax.persistence.Query;
 
 import ru.annikonenkov.rs.message.entities.group.Group;
 import ru.annikonenkov.rs.message.entities.group.GroupDAO;
-import ru.annikonenkov.rs.message.entities.message.exception.ExceptionForAddMessage;
 import ru.annikonenkov.rs.message.entities.user.User;
 import ru.annikonenkov.rs.message.entities.user.UserDAO;
+import ru.annikonenkov.rs.message.exception.ExceptionForAddMessage;
 
 @Stateless
 public class MessageDAO {
@@ -70,9 +70,8 @@ public class MessageDAO {
 	 * in the database, and the entities in your current persistence context become
 	 * outdated.
 	 * 
-	 * А у меня здесь пропущено обновление author и group. Вопрос: где и как и когда
-	 * они должны сохраняться? Не в этом же DAO ведь? Тогда кто об этом должен
-	 * заботиться? Не endPoind - же. Нужен какой-то контроллер?
+	 * У меня здесь пропущено обновление author и group. Но все это работает так как именно в message хранится foreignKey и запись для связи в БД осуществляется через поле в message.
+	 * Вопрос: где и как и когда они (author и group) должны сохраняться? Не в этом же DAO ведь? Тогда кто об этом должен заботиться? Не endPoind - же? А может и он? Нужен какой-то контроллер?
 	 */
 	public int addNewMessageToGroup(String textOfMessage, int authorId, int groupReceiverId) throws ExceptionForAddMessage {
 		User author = userDAO.getUserById(authorId);

@@ -28,14 +28,14 @@ import ru.annikonenkov.rs.message.entities.group.GroupDAO;
 import ru.annikonenkov.rs.message.entities.message.Message;
 import ru.annikonenkov.rs.message.entities.message.MessageDAO;
 import ru.annikonenkov.rs.message.entities.message.dto.TransferToDTOMessage;
-import ru.annikonenkov.rs.message.entities.message.exception.ExceptionForAddMessage;
-import ru.annikonenkov.rs.message.entities.message.exception.ExceptionParseRequest;
-import ru.annikonenkov.rs.message.entities.message.exception.handler.MessageFormWithFile;
-import ru.annikonenkov.rs.message.entities.message.exception.handler.HandlerPostRquestForNewMessageWithFileFirst;
-import ru.annikonenkov.rs.message.entities.message.exception.handler.HandlerPostRquestForNewMessageWithFileSecond;
-import ru.annikonenkov.rs.message.entities.message.exception.handler.MessageForm;
-import ru.annikonenkov.rs.message.entities.message.exception.handler.iHandlerPostRequestForNewMessageWithFile;
+import ru.annikonenkov.rs.message.entities.message.handler.HandlerPostRquestForNewMessageWithFileFirst;
+import ru.annikonenkov.rs.message.entities.message.handler.HandlerPostRquestForNewMessageWithFileSecond;
+import ru.annikonenkov.rs.message.entities.message.handler.MessageForm;
+import ru.annikonenkov.rs.message.entities.message.handler.MessageFormWithFile;
+import ru.annikonenkov.rs.message.entities.message.handler.iHandlerPostRequestForNewMessageWithFile;
 import ru.annikonenkov.rs.message.entities.user.UserDAO;
+import ru.annikonenkov.rs.message.exception.ExceptionForAddMessage;
+import ru.annikonenkov.rs.message.exception.ExceptionParseRequest;
 
 @Stateless
 @Path("/chat/messages")

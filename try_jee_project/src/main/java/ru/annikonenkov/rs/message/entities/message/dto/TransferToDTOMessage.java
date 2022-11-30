@@ -3,8 +3,6 @@ package ru.annikonenkov.rs.message.entities.message.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.jboss.logging.Logger;
 
 import ru.annikonenkov.rs.message.entities.group.Group;

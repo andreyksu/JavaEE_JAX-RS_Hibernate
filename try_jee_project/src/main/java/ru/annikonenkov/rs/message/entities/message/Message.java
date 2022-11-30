@@ -29,6 +29,7 @@ public class Message {
 
 	@Lob
 	@Column(name = "file_of_message")
+	//@Column(name = "file_of_message", columnDefinition="BLOB")
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] fileOfMessage;
 

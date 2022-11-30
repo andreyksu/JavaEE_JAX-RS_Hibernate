@@ -2,6 +2,9 @@ package ru.annikonenkov.rs.message.entities.group.dto;
 
 import java.util.Date;
 
+/*
+ * DTO понадобилось т.к. сереализовать Entity в явном виде не удается. Т.к. зависимости отмечены как Lazy - и при сереализации возникает ошибка.
+ */
 public class DTOGroup {
 
 	private int id;
